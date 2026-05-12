@@ -1,7 +1,7 @@
 #ifndef clox_chunk_h
 #define clox_chunk_h
 
-#include "../common.h"
+#include "../common/common.h"
 
 // The list of all the bytecodes supported by the VM
 typedef enum {
