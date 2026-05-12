@@ -9,7 +9,10 @@
     ((capacity) < MIN_CAP ? MIN_CAP : (capacity) * 2)
 
 #define GROW_ARRAY(type, pointer, old_cap, new_cap) \
-    ((type *)reallocate(pointer, sizeof(type) * old_cap, sizeof(type) * new_cap))
+    ((type *)reallocate(pointer, sizeof(type) * (old_cap), sizeof(type) * (new_cap)))
+
+#define FREE_ARRAY(type, pointer, old_cap) \
+    ((type *)reallocate(pointer, sizeof(type) * (old_cap), 0))
 
 void* reallocate(void* pointer, size_t old_size, size_t new_size);
 
