@@ -25,8 +25,11 @@ void write_chunk(Chunk *chunk, uint8_t byte, int line) {
         // step 1: Increase the capacity
         int old_cap = chunk->capacity;
         chunk->capacity = GROW_CAPACITY(old_cap);
+        int old_line_counts = chunk->line_count;
+        chunk->line_count = GROW_CAPACITY(old_line_counts);
         // step 2: Allocate -> copy array elem to it -> make `chunk->code` point at it
         chunk->code = GROW_ARRAY(uint8_t, chunk->code, old_cap, chunk->capacity);
+        chunk->lines = GROW_ARRAY(char, chunk->lines, old_line_counts, chunk->line_count);
     }
 
     if (line > chunk->line_count) {
@@ -39,6 +42,7 @@ void write_chunk(Chunk *chunk, uint8_t byte, int line) {
 
 void free_chunk(Chunk *chunk) {
     FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
+    FREE_ARRAY(char, chunk->lines, chunk->line_count);
     free_value_array(&chunk->constants);
     init_chunk(chunk);
 }
@@ -56,6 +60,7 @@ char get_line(Chunk* chunk, int instruction_ix) {
         if (instruction_ix >= prev_line && instruction_ix <= prev_line + chunk->lines[i]) {
             return i;
         }
+        prev_line += chunk->lines[i];
     }
 
     return -1;
