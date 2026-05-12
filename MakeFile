@@ -1,0 +1,4 @@
+CC = gcc
+OUT_LOCATION = exec/exec
+main: main.c
+    $(CC) -o $(OUT_LOCATION) cli/main.c common/memory.c opcodes/chunk.c
