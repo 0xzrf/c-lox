@@ -5,6 +5,7 @@
 #include "../constants/value.h"
 // The list of all the bytecodes supported by the VM
 typedef enum {
+    OP_CONSTANT,
     OP_RETURN,
 } OpCode;
 
