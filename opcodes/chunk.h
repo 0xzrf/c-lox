@@ -2,7 +2,7 @@
 #define clox_chunk_h
 
 #include "../common/common.h"
-
+#include "../constants/value.h"
 // The list of all the bytecodes supported by the VM
 typedef enum {
     OP_RETURN,
@@ -12,10 +12,12 @@ typedef struct {
     int count; // the count of elements in use by `code`
     int capacity; // the capacity of the dynamic array `code`
     uint8_t* code; // the actual (dynamic)array of bytecodes
+    ValueArray constants; // constants that're referred to in the bytecodes(like `1 + 2` can be converted to immediate `3`)
 } Chunk;
 
 void init_chunk(Chunk* chunk);
 void write_chunk(Chunk* chunk, uint8_t byte);
 void free_chunk(Chunk* chunk);
+int add_constant(Chunk*, Value);
 
 #endif
