@@ -13,7 +13,7 @@ typedef struct {
     int count; // the count of elements in use by `code`
     int capacity; // the capacity of the dynamic array `code`
     uint8_t* code; // the actual (dynamic)array of bytecodes
-    int* line;
+    int* lines;
     ValueArray constants; // constants that're referred to in the bytecodes(like `1 + 2` can be converted to immediate `3`)
 } Chunk;
 
