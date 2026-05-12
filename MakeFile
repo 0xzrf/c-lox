@@ -1,6 +1,6 @@
 CC = gcc
 OUT_LOCATION = ./exec/exec
-MODULES = common/memory.c opcodes/chunk.c debug/debug.c
+MODULES = common/memory.c opcodes/chunk.c debug/debug.c constants/value.c
 
 build: cli/main.c
 	$(CC) -o $(OUT_LOCATION) cli/main.c $(MODULES)
