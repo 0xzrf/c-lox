@@ -2,13 +2,20 @@
 #define clox_vm_h
 
 #include "../opcodes/chunk.h"
+#include "../common/memory.h"
 
-#define MAX_STACK_SIZE 256
+#define INIT_MAX_STACK_SIZE 256
+
+#define NEW_STACK_SIZE(old_size) ((old_size) * 1.5)
+
+#define INCR_STACK_SIZE(type, pointer, old_size, new_size) \
+    ((type *)reallocate(pointer, sizeof(type) * (old_size), sizeof(type) * (new_size)))
 
 typedef struct {
     Chunk* chunk;
     uint8_t* program_counter;
-    Value stack[MAX_STACK_SIZE];
+    int stack_size;
+    Value *stack;
     Value* stack_top; // points to the top `un-allocated` index of the stack
 } VM;
 

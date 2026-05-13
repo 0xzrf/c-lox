@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "vm.h"
 #include "../common/common.h"
@@ -12,10 +13,17 @@ void init_vm() {
 
 // intialize stack_top to be = stack, that means the stack is empty
 void init_stack() {
-    vm.stack_top = vm.stack;
+    vm.stack_size = INIT_MAX_STACK_SIZE;
+    vm.stack_top = vm.stack = realloc(vm.stack, vm.stack_size);
 }
 
 void push(Value value) {
+    if (vm.stack - vm.stack_top + 1 > vm.stack_size) {
+        int old_stack_size = vm.stack_size;
+        vm.stack_size = NEW_STACK_SIZE(old_stack_size);
+        vm.stack = INCR_STACK_SIZE(Value, vm.stack, old_stack_size, vm.stack_size);
+    }
+
     *vm.stack_top++ = value;
 }
 
