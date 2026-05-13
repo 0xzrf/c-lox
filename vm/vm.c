@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "vm_helpers.h"
 #include "vm.h"
 #include "../common/common.h"
 #include "../debug/debug.h"
@@ -73,7 +74,7 @@ static InterpreterResult run() {
             case OP_SUB: BINARY_OP(-); break;
             case OP_MUL: BINARY_OP(*); break;
             case OP_DIV: BINARY_OP(/); break;
-            case OP_NEGATE: push(-pop()); break;
+            case OP_NEGATE: _negate_last_stack_var(&vm); break;
             case OP_RETURN:
                 print_value(pop(), 1);
                 return SUCCESSFUL_RUN;
