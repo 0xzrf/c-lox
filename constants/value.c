@@ -23,6 +23,9 @@ void free_value_array(ValueArray* array) {
     init_value_array(array);
 }
 
-void print_value(Value value) {
+void print_value(Value value, bool nl) {
     printf("%g", value);
+    if (nl) {
+        printf("\n");
+    }
 }

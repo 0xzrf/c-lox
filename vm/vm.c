@@ -39,7 +39,7 @@ static InterpreterResult run() {
         #ifdef DEBUG_TRACE_EXECUTION
         for (Value* stack_pointer = vm.stack; stack_pointer < vm.stack_top; stack_pointer++) {
             putchar('[');
-            print_value(*stack_pointer);
+            print_value(*stack_pointer, 0);
             putchar(']');
         }
         putchar('\n');
@@ -53,8 +53,9 @@ static InterpreterResult run() {
                 Value constant = READ_CONSTANT();
                 push(constant);
                 break;
+            case OP_NEGATE: push(-pop()); break;
             case OP_RETURN:
-                print_value(pop());
+                print_value(pop(), 1);
                 return SUCCESSFUL_RUN;
         }
 

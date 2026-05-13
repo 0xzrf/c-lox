@@ -21,6 +21,8 @@ int disassemble_instruction(Chunk *chunk, int offset) {
     switch (instruction) {
         case OP_RETURN:
             return simple_instruction("OP_RETURN", offset);
+        case OP_NEGATE:
+            return simple_instruction("OP_NEGATE", offset);
         case OP_CONSTANT:
             return constant_instruction("OP_CONSTANT", chunk, offset);
         default:
@@ -37,7 +39,6 @@ static int simple_instruction(const char * name, int offset) {
 static int constant_instruction(const char * name, Chunk * chunk, int offset) {
     uint8_t constant = chunk->code[offset + 1];
     printf("%-16s %4d ", name, constant);
-    print_value(chunk->constants.value[constant]);
-    printf("\n");
+    print_value(chunk->constants.value[constant], 1);
     return offset + 2;
 }
