@@ -2,6 +2,7 @@
 
 #include "vm.h"
 #include "../common/common.h"
+#include "../debug/debug.h"
 
 VM vm;
 
@@ -20,10 +21,15 @@ static InterpreterResult run() {
     #define READ_CONSTANT() (vm.chunk->constants.value[READ_BYTE()])
 
     while (true) {
+        #ifdef DEBUG_TRACE_EXECUTION
+        disassemble_instruction(vm.chunk, (int)(vm.program_counter - vm.chunk->code));
+        #endif
+
         uint8_t instruction;
         switch (instruction = READ_BYTE()) {
             case OP_CONSTANT:
-                Value constant = READ_CONSTANT();
+                Value constant;
+                constant = READ_CONSTANT();
                 print_value(constant);
                 printf("\n");
                 break;

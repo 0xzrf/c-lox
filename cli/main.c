@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "../opcodes/chunk.h"
-#include "../debug/debug.h"
 #include "../vm/vm.h"
 
 int main(int argc, const char *argv[]) {
@@ -17,7 +16,6 @@ int main(int argc, const char *argv[]) {
 
     write_chunk(&chunk, OP_RETURN, 1);
     interpret(&chunk);
-    disassemble_chunk(&chunk, "test chunks");
 
     free_chunk(&chunk);
     free_vm();
