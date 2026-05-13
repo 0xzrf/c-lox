@@ -19,7 +19,7 @@ void push(Value value) {
     *vm.stack_top++ = value;
 }
 
-Value pop(Value value) {
+Value pop() {
     return *--vm.stack_top; // decrement vm.stack_top first, and then dereference it
 }
 
@@ -37,18 +37,24 @@ static InterpreterResult run() {
 
     while (true) {
         #ifdef DEBUG_TRACE_EXECUTION
+        for (Value* stack_pointer = vm.stack; stack_pointer < vm.stack_top; stack_pointer++) {
+            putchar('[');
+            print_value(*stack_pointer);
+            putchar(']');
+        }
+        putchar('\n');
+
         disassemble_instruction(vm.chunk, (int)(vm.program_counter - vm.chunk->code));
         #endif
 
         uint8_t instruction;
         switch (instruction = READ_BYTE()) {
             case OP_CONSTANT:
-                Value constant;
-                constant = READ_CONSTANT();
-                print_value(constant);
-                printf("\n");
+                Value constant = READ_CONSTANT();
+                push(constant);
                 break;
             case OP_RETURN:
+                print_value(pop());
                 return SUCCESSFUL_RUN;
         }
 
