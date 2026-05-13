@@ -11,3 +11,11 @@ build_and_run: cli/main.c
 
 bench:
 	$(CC) $(OPTIONS) -o $(OUT_LOCATION) cli/main.c $(MODULES) && time $(OUT_LOCATION)
+
+
+TEST_OPTIONS = -Iunity/src -Isrc
+TEST_MODULES = tests/test_chunk.c tests/unity/unity.c
+TEST_OUT = tests/exec/tests
+
+test: tests/lib.c
+	$(CC) tests/lib.c $(TEST_MODULES) $(MODULES) $(TEST_OPTIONS) -o $(TEST_OUT) && $(TEST_OUT)
