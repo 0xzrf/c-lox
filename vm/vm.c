@@ -34,6 +34,12 @@ InterpreterResult interpret(Chunk* chunk) {
 static InterpreterResult run() {
     #define READ_BYTE() (*vm.program_counter++)
     #define READ_CONSTANT() (vm.chunk->constants.value[READ_BYTE()])
+    #define BINARY_OP(op) \
+        do { \
+            Value b = pop();    \
+            Value a = pop();    \
+            push(a op b);      \
+        } while (false) \
 
     while (true) {
         #ifdef DEBUG_TRACE_EXECUTION
@@ -53,6 +59,10 @@ static InterpreterResult run() {
                 Value constant = READ_CONSTANT();
                 push(constant);
                 break;
+            case OP_ADD: BINARY_OP(+); break;
+            case OP_SUB: BINARY_OP(-); break;
+            case OP_MUL: BINARY_OP(*); break;
+            case OP_DIV: BINARY_OP(/); break;
             case OP_NEGATE: push(-pop()); break;
             case OP_RETURN:
                 print_value(pop(), 1);
@@ -63,4 +73,5 @@ static InterpreterResult run() {
 
     #undef READ_CONSTANT
     #undef READ_BYTE
+    #undef BINARY_OP
 }

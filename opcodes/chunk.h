@@ -3,9 +3,16 @@
 
 #include "../common/common.h"
 #include "../constants/value.h"
+
 // The list of all the bytecodes supported by the VM
 typedef enum {
     OP_CONSTANT,
+
+    OP_ADD,
+    OP_SUB,
+    OP_MUL,
+    OP_DIV,
+
     OP_NEGATE,
     OP_RETURN,
 } OpCode;
