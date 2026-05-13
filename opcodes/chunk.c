@@ -4,7 +4,6 @@
 #include "chunk.h"
 #include "../common/memory.h"
 
-
 // initializes a un-initialized chunk struct
 void init_chunk(Chunk *chunk) {
     chunk->capacity = 0;
