@@ -18,6 +18,8 @@ void init_stack() {
 }
 
 void push(Value value) {
+    // Some big programs might end up taking the entire stack
+    // so it's important to make it dynamic and increase it's size
     if (vm.stack - vm.stack_top + 1 > vm.stack_size) {
         int old_stack_size = vm.stack_size;
         vm.stack_size = NEW_STACK_SIZE(old_stack_size);
