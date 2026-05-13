@@ -1,0 +1,3 @@
+1. Implement malloc, free and realloc for this interpreter
+2. Introduce a OP_CONSTANT_LONG opcode that stores a 24 bit value chunks.constants.value
+3.

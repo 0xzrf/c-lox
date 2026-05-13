@@ -6,7 +6,22 @@
 
 VM vm;
 
-void init_vm() {}
+void init_vm() {
+    init_stack();
+}
+
+// intialize stack_top to be = stack, that means the stack is empty
+void init_stack() {
+    vm.stack_top = vm.stack;
+}
+
+void push(Value value) {
+    *vm.stack_top++ = value;
+}
+
+Value pop(Value value) {
+    return *--vm.stack_top; // decrement vm.stack_top first, and then dereference it
+}
 
 void free_vm() {}
 
