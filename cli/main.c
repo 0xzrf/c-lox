@@ -11,12 +11,12 @@ int main(int argc, const char *argv[]) {
 
     init_chunk(&chunk);
 
-    write_chunk(&chunk, OP_RETURN, 1);
-    int constant = add_constant(&chunk, 1.2);
-
     write_chunk(&chunk, OP_CONSTANT, 2);
+    int constant = add_constant(&chunk, 1.2);
     write_chunk(&chunk, constant, 2);
 
+    write_chunk(&chunk, OP_RETURN, 1);
+    interpret(&chunk);
     disassemble_chunk(&chunk, "test chunks");
 
     free_chunk(&chunk);
