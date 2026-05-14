@@ -7,7 +7,6 @@
 
 static void repl(void);
 static void run_file(const char*);
-static InterpreterResult interpret_line(const char*);
 
 int main(int argc, const char *argv[]) {
     init_vm();
@@ -37,7 +36,7 @@ static void repl(void) {
             break;
         }
 
-        interpret_line(line);
+        interpret_code(line);
     }
 }
 
@@ -57,6 +56,7 @@ static char* read_file(const char* path) {
         fprintf(stderr, "Not enough memory to allocate\n");
         exit(MALLOC_ERR);
     }
+
     size_t bytes_read = fread(buffer, sizeof(char), file_size, file);
     if (bytes_read < file_size) {
         fprintf(stderr, "Could not read file \"%s\".\n", path);
@@ -70,7 +70,7 @@ static char* read_file(const char* path) {
 
 static void run_file(const char* path) {
     char *source = read_file(path);
-    InterpreterResult result = interpret_line(source);
+    InterpreterResult result = interpret_code(source);
     free(source);
 
     if (result == COMPILE_TIME_ERROR) exit(COMPILATION_ERROR_CODE);

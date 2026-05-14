@@ -3,6 +3,7 @@
 
 #include "../opcodes/chunk.h"
 #include "../common/memory.h"
+#include "../compiler/compiler.h"
 
 #define INIT_MAX_STACK_SIZE 256
 
@@ -31,7 +32,7 @@ void init_stack();
 void push(Value);
 Value pop();
 
-InterpreterResult interpret(Chunk*);
+InterpreterResult interpret(const char*);
 
 static InterpreterResult run();
 

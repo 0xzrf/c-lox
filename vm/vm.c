@@ -36,10 +36,9 @@ Value pop() {
 
 void free_vm() {}
 
-InterpreterResult interpret(Chunk* chunk) {
-    vm.chunk = chunk;
-    vm.program_counter = chunk->code;
-    return run();
+InterpreterResult interpret(const char* source) {
+    compile(source);
+    return SUCCESSFUL_RUN;
 }
 
 static InterpreterResult run() {
