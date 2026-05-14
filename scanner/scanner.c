@@ -34,6 +34,18 @@ Token scan_token(void) {
       case '+': return make_token(TOKEN_PLUS);
       case '/': return make_token(TOKEN_SLASH);
       case '*': return make_token(TOKEN_STAR);
+      case '!':
+        return make_token(
+            match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
+      case '=':
+        return make_token(
+            match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+      case '<':
+        return make_token(
+            match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+      case '>':
+        return make_token(
+            match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
     }
 
     return error_token("Unexpected character.");
@@ -65,4 +77,11 @@ static Token error_token(const char* message) {
 
 static char advance(void) {
     return *scanner.current++;
+}
+
+static bool match(char expected) {
+  if (is_at_end()) return false;
+  if (*scanner.current != expected) return false;
+  scanner.current++;
+  return true;
 }

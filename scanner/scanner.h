@@ -44,5 +44,6 @@ static bool is_at_end();
 static Token make_token(TokenType);
 static Token error_token(const char* message);
 static char advance(void);
+static bool match(const char);
 
 #endif
