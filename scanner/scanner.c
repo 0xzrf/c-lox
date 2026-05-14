@@ -76,7 +76,7 @@ static Token error_token(const char* message) {
   return token;
 }
 
-static char advance(void) {
+static char advance() {
     return *scanner.current++;
 }
 
@@ -100,10 +100,23 @@ static void skip_whitespace() {
         scanner.line++;
         advance();
         break;
+      case '/':
+        if (peek_next() == '/') {
+            // A comment goes until the end of the line.
+            while (peek() != '\n' && !is_at_end()) advance();
+            } else {
+            return;
+        }
+          break;
       default:
         return;
     }
   }
+}
+
+static char peek_next() {
+  if (is_at_end()) return '\0';
+  return scanner.current[1];
 }
 
 static char peek() {

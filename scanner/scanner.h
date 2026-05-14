@@ -47,5 +47,6 @@ static char advance(void);
 static bool match(const char);
 static void skip_whitespace(void);
 static char peek(void);
+static char peek_next(void);
 
 #endif
