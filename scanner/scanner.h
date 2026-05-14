@@ -53,5 +53,7 @@ static Token number();
 static bool is_digit(char c);
 static bool is_alpha(char c);
 static Token identifier();
+static TokenType identifier_type();
+static TokenType check_keyword(int, int, const char*, TokenType);
 
 #endif
