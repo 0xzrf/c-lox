@@ -1,6 +1,8 @@
 #ifndef clox_scanner_h
 #define clox_scanner_h
 
+#include <stdbool.h>
+
 typedef struct {
     char* start;
     char* current;
@@ -36,7 +38,10 @@ typedef struct {
     TokenType type;
 } Token;
 
-void init_scanner(char*);
-Token scan_token();
+void init_scanner(const char*);
+Token scan_token(void);
+static bool is_at_end();
+static Token make_token(TokenType);
+static Token error_token(const char* message);
 
 #endif
