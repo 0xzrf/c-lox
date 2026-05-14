@@ -51,7 +51,7 @@ static InterpreterResult run() {
             push(a op b);      \
         } while (false) \
 
-    while (true) {
+    INFINITE_LOOP {
         #ifdef DEBUG_TRACE_EXECUTION
         for (Value* stack_pointer = vm.stack; stack_pointer < vm.stack_top; stack_pointer++) {
             putchar('[');

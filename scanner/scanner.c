@@ -15,6 +15,7 @@ void init_scanner(const char* source) {
 Token scan_token(void) {
     // we can confidently set start to current, since we guarentee that we will
     // consume the entire valid lexeme from the source code
+    skip_whitespace();
     scanner.start = scanner.current;
 
     if (is_at_end())
@@ -84,4 +85,27 @@ static bool match(char expected) {
   if (*scanner.current != expected) return false;
   scanner.current++;
   return true;
+}
+
+static void skip_whitespace() {
+  INFINITE_LOOP {
+    char c = peek();
+    switch (c) {
+      case ' ':
+      case '\r':
+      case '\t':
+        advance();
+        break;
+      case '\n':
+        scanner.line++;
+        advance();
+        break;
+      default:
+        return;
+    }
+  }
+}
+
+static char peek() {
+  return *scanner.current;
 }

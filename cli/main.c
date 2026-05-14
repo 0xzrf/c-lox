@@ -28,7 +28,7 @@ int main(int argc, const char *argv[]) {
 static void repl(void) {
     char line[1024];
 
-    while (true) {
+    INFINITE_LOOP {
         printf("> ");
 
         if (!fgets(line, sizeof(line), stdin)) {

@@ -7,6 +7,8 @@
 
 #define DEBUG_TRACE_EXECUTION
 
+#define INFINITE_LOOP for(;;)
+
 typedef enum {
     RUNTIME_ERROR_CODE = 70,
     COMPILATION_ERROR_CODE = 65,

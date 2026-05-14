@@ -45,5 +45,7 @@ static Token make_token(TokenType);
 static Token error_token(const char* message);
 static char advance(void);
 static bool match(const char);
+static void skip_whitespace(void);
+static char peek(void);
 
 #endif
