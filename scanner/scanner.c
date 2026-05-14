@@ -23,6 +23,8 @@ Token scan_token(void) {
 
     char c = advance();
 
+    if (is_digit(c)) return number();
+
     switch (c) {
       case '(': return make_token(TOKEN_LEFT_PAREN);
       case ')': return make_token(TOKEN_RIGHT_PAREN);
@@ -47,6 +49,7 @@ Token scan_token(void) {
       case '>':
         return make_token(
             match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+      case '"': return string();
     }
 
     return error_token("Unexpected character.");
@@ -90,6 +93,7 @@ static bool match(char expected) {
 static void skip_whitespace() {
   INFINITE_LOOP {
     char c = peek();
+
     switch (c) {
       case ' ':
       case '\r':
@@ -117,6 +121,37 @@ static void skip_whitespace() {
 static char peek_next() {
   if (is_at_end()) return '\0';
   return scanner.current[1];
+}
+
+static Token string() {
+  while (peek() != '"' && !is_at_end()) {
+    if (peek() == '\n') scanner.line++;
+    advance();
+  }
+
+  if (is_at_end()) return error_token("Unterminated string.");
+
+  // The closing quote.
+  advance();
+  return make_token(TOKEN_STRING);
+}
+
+static bool is_digit(char c) {
+  return c >= '0' && c <= '9';
+}
+
+static Token number() {
+  while (is_digit(peek())) advance();
+
+  // Look for a fractional part.
+  if (peek() == '.' && is_digit(peek_next())) {
+    // Consume the ".".
+    advance();
+
+    while (is_digit(peek())) advance();
+  }
+
+  return make_token(TOKEN_NUMBER);
 }
 
 static char peek() {

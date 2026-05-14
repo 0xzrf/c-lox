@@ -48,5 +48,8 @@ static bool match(const char);
 static void skip_whitespace(void);
 static char peek(void);
 static char peek_next(void);
+static Token string();
+static Token number();
+static bool is_digit(char c);
 
 #endif
