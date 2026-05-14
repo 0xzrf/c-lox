@@ -23,6 +23,7 @@ Token scan_token(void) {
 
     char c = advance();
 
+    if (is_alpha(c)) return identifier();
     if (is_digit(c)) return number();
 
     switch (c) {
@@ -152,6 +153,17 @@ static Token number() {
   }
 
   return make_token(TOKEN_NUMBER);
+}
+
+static bool is_alpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+            c == '_';
+}
+
+static Token identifier() {
+  while (is_alpha(peek()) || is_digit(peek())) advance();
+  return make_token(TOKEN_IDENTIFIER);
 }
 
 static char peek() {

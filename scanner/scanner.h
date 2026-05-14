@@ -51,5 +51,7 @@ static char peek_next(void);
 static Token string();
 static Token number();
 static bool is_digit(char c);
+static bool is_alpha(char c);
+static Token identifier();
 
 #endif
