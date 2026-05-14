@@ -1,26 +1,82 @@
 #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "../opcodes/chunk.h"
 #include "../vm/vm.h"
+
+static void repl(void);
+static void run_file(const char*);
+static InterpreterResult interpret_line(const char*);
 
 int main(int argc, const char *argv[]) {
     init_vm();
 
-    Chunk chunk;
+    if (argc == 1) {
+       repl();
+     } else if (argc == 2) {
+       run_file(argv[1]);
+     } else {
+       fprintf(stderr, "Usage: clox [path]\n");
+       exit(INVALID_CMD_ARGS);
+     }
 
-    init_chunk(&chunk);
-
-    write_chunk(&chunk, OP_CONSTANT, 2);
-    int constant = add_constant(&chunk, 1.2);
-    write_chunk(&chunk, constant, 2);
-
-    write_chunk(&chunk, OP_NEGATE, 3);
-
-    write_chunk(&chunk, OP_RETURN, 1);
-    interpret(&chunk);
-
-    free_chunk(&chunk);
     free_vm();
 
-    return 0;
+    return MAIN_SUCCESS;
+}
+
+static void repl(void) {
+    char line[1024];
+
+    while (true) {
+        printf("> ");
+
+        if (!fgets(line, sizeof(line), stdin)) {
+            printf("\n");
+            break;
+        }
+
+        interpret_line(line);
+    }
+}
+
+static char* read_file(const char* path) {
+    FILE* file = fopen(path, "rb");
+    if (file == NULL) {
+        fprintf(stderr, "Unable to read file %s\n", path);
+        exit(FILE_POINTER_NULL);
+    }
+
+    fseek(file, 0L, SEEK_END);
+    size_t file_size = ftell(file);
+    rewind(file);
+
+    char* buffer = (char*)malloc(file_size + 1);
+    if (buffer == NULL) {
+        fprintf(stderr, "Not enough memory to allocate\n");
+        exit(MALLOC_ERR);
+    }
+    size_t bytes_read = fread(buffer, sizeof(char), file_size, file);
+    if (bytes_read < file_size) {
+        fprintf(stderr, "Could not read file \"%s\".\n", path);
+        exit(INVALID_READ);
+    }
+
+    buffer[bytes_read] = '\0';
+
+    return buffer;
+}
+
+static void run_file(const char* path) {
+    char *source = read_file(path);
+    InterpreterResult result = interpret_line(source);
+    free(source);
+
+    if (result == COMPILE_TIME_ERROR) exit(COMPILATION_ERROR_CODE);
+    if (result == RUNTIME_ERROR) exit(RUNTIME_ERROR_CODE);
+}
+
+static InterpreterResult interpret_line(const char*) {
+
 }
