@@ -36,7 +36,7 @@ static void repl(void) {
             break;
         }
 
-        interpret_code(line);
+        interpret(line);
     }
 }
 
@@ -70,13 +70,9 @@ static char* read_file(const char* path) {
 
 static void run_file(const char* path) {
     char *source = read_file(path);
-    InterpreterResult result = interpret_code(source);
+    InterpreterResult result = interpret(source);
     free(source);
 
     if (result == COMPILE_TIME_ERROR) exit(COMPILATION_ERROR_CODE);
     if (result == RUNTIME_ERROR) exit(RUNTIME_ERROR_CODE);
-}
-
-static InterpreterResult interpret_line(const char*) {
-
 }
