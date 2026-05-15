@@ -12,7 +12,7 @@ void init_scanner(const char* source) {
     scanner.line = 1;
 }
 
-Token scan_token(void) {
+Token scan_token() {
     // we can confidently set start to current, since we guarentee that we will
     // consume the entire valid lexeme from the source code
     skip_whitespace();
