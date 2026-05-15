@@ -1,21 +1,43 @@
 #include "compiler.h"
+#include <stdlib.h>
+
 
 Parser parser;
 Chunk* compiling_chunk;
 
 bool compile(const char* source, Chunk* chunk) {
     init_scanner(source);
-    init_globals();
+    init_globals(chunk);
 
     advance_parser();
+    expression();
 
     consume(TOKEN_EOF, "Expect end of expression.");
 
     return !parser.had_error;
 }
 
+static void compile_number() {
+    Value value = strtod(parser.prev.start, NULL);
+    emit_constant(value);
+}
+
+static uint8_t make_constant(Value value) {
+    int constant = add_constant(current_chunk(), value);
+    if (constant > UINT8_MAX) {
+        error("Too many constants");
+        return 0;
+    }
+
+    return (uint8_t)constant;
+}
+
 static void emit_byte(uint8_t byte) {
     write_chunk(current_chunk(), byte, parser.prev.line);
+}
+
+static void emit_constant(Value value) {
+    emit_opcode_with_operands(OP_CONSTANT, make_constant(value));
 }
 
 static void end_compiler() {
@@ -29,6 +51,10 @@ static void emit_return() {
 static void emit_opcode_with_operands(uint8_t opcode, uint8_t operand) {
     emit_byte(opcode);
     emit_byte(operand);
+}
+
+static Chunk* current_chunk() {
+    return compiling_chunk;
 }
 
 static void init_globals(Chunk* chunk) {

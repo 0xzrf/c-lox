@@ -2,6 +2,7 @@
 #define clox_compiler_h
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "../scanner/scanner.h"
 #include "../opcodes/chunk.h"
 
@@ -13,16 +14,28 @@ typedef struct {
 } Parser;
 
 bool compile(const char*, Chunk*);
-static void emit_byte(uint8_t);
-static void advance_parser(void);
+
+// error fns
 static void error_at(Token*, const char*);
 static void error(const char*);
 static void error_at_current(const char*);
+
+// global helpers
 static void init_globals(Chunk*);
 static void consume(TokenType, const char*);
 static Chunk* current_chunk(void);
+static void advance_parser(void);
+
+// extra helpers
+static void emit_byte(uint8_t);
 static void end_compiler(void);
 static void emit_return(void);
 static void emit_opcode_with_operands(uint8_t, uint8_t);
+
+/// bytecode helpers
+static void compile_number(void);
+static void emit_constant(Value);
+static uint8_t make_constant(Value);
+static void expression(void);
 
 #endif
