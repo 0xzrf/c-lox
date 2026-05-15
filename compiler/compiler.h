@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include "../scanner/scanner.h"
-void compile(const char*);
+#include "../opcodes/chunk.h"
+
+bool compile(const char*, Chunk*);
 
 #endif

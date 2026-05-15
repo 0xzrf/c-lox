@@ -37,7 +37,17 @@ Value pop() {
 void free_vm() {}
 
 InterpreterResult interpret(const char* source) {
-    compile(source);
+    Chunk chunk;
+
+    init_chunk(&chunk);
+
+    if (!compile(source, &chunk)) {
+        free_chunk(&chunk);
+        return COMPILE_TIME_ERROR;
+    }
+
+
+    free_chunk(&chunk);
     return SUCCESSFUL_RUN;
 }
 
