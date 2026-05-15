@@ -13,12 +13,16 @@ typedef struct {
 } Parser;
 
 bool compile(const char*, Chunk*);
+static void emit_byte(uint8_t);
 static void advance_parser(void);
 static void error_at(Token*, const char*);
 static void error(const char*);
 static void error_at_current(const char*);
-static void init_parser(void);
+static void init_globals(Chunk*);
 static void consume(TokenType, const char*);
-
+static Chunk* current_chunk(void);
+static void end_compiler(void);
+static void emit_return(void);
+static void emit_opcode_with_operands(uint8_t, uint8_t);
 
 #endif

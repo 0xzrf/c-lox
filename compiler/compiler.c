@@ -1,16 +1,11 @@
 #include "compiler.h"
-#include "errors.h"
 
 Parser parser;
-
-static void init_parser() {
-    parser.had_error = false;
-    parser.panic_mode = false;
-}
+Chunk* compiling_chunk;
 
 bool compile(const char* source, Chunk* chunk) {
     init_scanner(source);
-    init_parser();
+    init_globals();
 
     advance_parser();
 
@@ -19,7 +14,29 @@ bool compile(const char* source, Chunk* chunk) {
     return !parser.had_error;
 }
 
+static void emit_byte(uint8_t byte) {
+    write_chunk(current_chunk(), byte, parser.prev.line);
+}
 
+static void end_compiler() {
+    emit_return();
+}
+
+static void emit_return() {
+    emit_byte(OP_RETURN);
+}
+
+static void emit_opcode_with_operands(uint8_t opcode, uint8_t operand) {
+    emit_byte(opcode);
+    emit_byte(operand);
+}
+
+static void init_globals(Chunk* chunk) {
+    parser.had_error = false;
+    parser.panic_mode = false;
+
+    compiling_chunk = chunk;
+}
 
 static void advance_parser() {
     parser.prev = parser.current;
@@ -45,6 +62,7 @@ static void consume(TokenType ty, const char *message) {
 static void error_at_current(const char * message) {
     error_at(&parser.current, message);
 }
+
 static void error(const char *message) {
     error_at(&parser.prev, message);
 }
