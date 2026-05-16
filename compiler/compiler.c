@@ -1,6 +1,10 @@
 #include "compiler.h"
 #include <stdlib.h>
 
+#ifdef DEBUG_PRINT_CODE
+#include "../debug/debug.h"
+#endif
+
 Parser parser;
 Chunk *compiling_chunk;
 ParseRule rules[] = {
@@ -47,6 +51,7 @@ ParseRule rules[] = {
 };
 
 bool compile(const char *source, Chunk *chunk) {
+  TITLE("compile start");
   init_scanner(source);
   init_globals(chunk);
 
@@ -56,6 +61,7 @@ bool compile(const char *source, Chunk *chunk) {
 
   consume(TOKEN_EOF, "Expect end of expression.");
 
+  TITLE("compile end");
   return !parser.had_error;
 }
 
@@ -113,6 +119,9 @@ static ParseRule *get_rule(TokenType type) { return &rules[type]; }
 
 static void parse_precedence(Precedence precedence) {
   advance_parser();
+
+  SUBTITLE("parse_precedence");
+  LOG_COMP_VARS(precedence, parser.prev.type, parser.current.type);
 
   ParseFn prefix_rule = get_rule(parser.prev.type)->prefix;
   if (prefix_rule == NULL) {

@@ -1,55 +1,38 @@
 #ifndef clox_compiler_h
 #define clox_compiler_h
 
+#include "../opcodes/chunk.h"
+#include "../scanner/scanner.h"
+#include "precedence.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../scanner/scanner.h"
-#include "../opcodes/chunk.h"
-
-#ifdef DEBUG_PRINT_CODE
-#include "../debug/debug.h"
-#endif
 
 typedef struct {
-    Token prev;
-    Token current;
-    bool had_error;
-    bool panic_mode;
+  Token prev;
+  Token current;
+  bool had_error;
+  bool panic_mode;
 } Parser;
-
-typedef enum {
-    PREC_NONE,
-    PREC_ASSIGNMENT,  // =
-    PREC_OR,          // or
-    PREC_AND,         // and
-    PREC_EQUALITY,    // == !=
-    PREC_COMPARISON,  // < > <= >=
-    PREC_TERM,        // + -
-    PREC_FACTOR,      // * /
-    PREC_UNARY,       // ! -
-    PREC_CALL,        // . ()
-    PREC_PRIMARY
-} Precedence;
 
 typedef void (*ParseFn)();
 
 typedef struct {
-    ParseFn prefix;
-    ParseFn infix;
-    Precedence precedence;
+  ParseFn prefix;
+  ParseFn infix;
+  Precedence precedence;
 } ParseRule;
 
-bool compile(const char*, Chunk*);
+bool compile(const char *, Chunk *);
 
 // error fns
-static void error_at(Token*, const char*);
-static void error(const char*);
-static void error_at_current(const char*);
+static void error_at(Token *, const char *);
+static void error(const char *);
+static void error_at_current(const char *);
 
 // global helpers
-static void init_globals(Chunk*);
-static void consume(TokenType, const char*);
-static Chunk* current_chunk(void);
+static void init_globals(Chunk *);
+static void consume(TokenType, const char *);
+static Chunk *current_chunk(void);
 static void advance_parser(void);
 
 // extra helpers
@@ -64,7 +47,7 @@ static void compile_number(void);
 static void compile_grouping(void);
 static void compile_binary(void);
 static void compile_unary(void);
-static ParseRule* get_rule(TokenType);
+static ParseRule *get_rule(TokenType);
 static uint8_t make_constant(Value);
 static void expression(void);
 static void parse_precedence(Precedence);
