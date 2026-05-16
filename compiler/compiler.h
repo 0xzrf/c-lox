@@ -27,6 +27,10 @@ typedef enum {
     PREC_PRIMARY
 } Precedence;
 
+typedef struct {
+    Precedence precedence
+} ParseRule;
+
 bool compile(const char*, Chunk*);
 
 // error fns
@@ -45,12 +49,14 @@ static void emit_byte(uint8_t);
 static void end_compiler(void);
 static void emit_return(void);
 static void emit_opcode_with_operands(uint8_t, uint8_t);
+static void emit_constant(Value);
 
 /// bytecode helpers
 static void compile_number(void);
 static void compile_grouping(void);
+static void compile_binary(void);
 static void compile_unary(void);
-static void emit_constant(Value);
+static ParseRule* get_rule(TokenType);
 static uint8_t make_constant(Value);
 static void expression(void);
 static void parse_precedence(Precedence);

@@ -40,6 +40,20 @@ static void compile_unary() {
     }
 }
 
+static void compile_binary() {
+  TokenType operatorType = parser.prev.type;
+  ParseRule* rule = get_rule(operatorType);
+  parse_precedence((Precedence)(rule->precedence + 1));
+
+  switch (operatorType) {
+    case TOKEN_PLUS:          emit_byte(OP_ADD); break;
+    case TOKEN_MINUS:         emit_byte(OP_SUB); break;
+    case TOKEN_STAR:          emit_byte(OP_MUL); break;
+    case TOKEN_SLASH:         emit_byte(OP_DIV); break;
+    default: return; // Unreachable.
+  }
+}
+
 static void parse_precedence(Precedence precedence) {
 
 
