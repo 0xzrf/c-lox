@@ -7,7 +7,7 @@
 
 Parser parser;
 Chunk *compiling_chunk;
-ParseRule rules[] = {
+const ParseRule rules[] = {
     [TOKEN_LEFT_PAREN] = {compile_grouping, NULL, PREC_NONE},
     [TOKEN_RIGHT_PAREN] = {NULL, NULL, PREC_NONE},
     [TOKEN_LEFT_BRACE] = {NULL, NULL, PREC_NONE},
@@ -115,7 +115,7 @@ static void compile_binary() {
   }
 }
 
-static ParseRule *get_rule(TokenType type) { return &rules[type]; }
+const static ParseRule *get_rule(TokenType type) { return &rules[type]; }
 
 static void parse_precedence(Precedence precedence) {
   advance_parser();
@@ -132,6 +132,9 @@ static void parse_precedence(Precedence precedence) {
   prefix_rule();
 
   while (precedence <= get_rule(parser.current.type)->precedence) {
+    printf("Precedence fn: %s\nPrecedence current: %s\n",
+           int_to_precedence(precedence),
+           int_to_precedence(get_rule(parser.current.type)->precedence));
     advance_parser();
     ParseFn infix_rule = get_rule(parser.prev.type)->infix;
     infix_rule();

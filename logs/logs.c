@@ -55,7 +55,8 @@ void log_title(const char *title) { print_centered_title(title); }
 
 void log_subtitle(const char *subtitle) { print_section_rule(subtitle); }
 
-void log_comp_vars(Precedence prec, TokenType prev_type, TokenType current_type) {
+void log_comp_vars(Precedence prec, TokenType prev_type,
+                   TokenType current_type) {
   print_label("precedence");
   printf("%-20s (%d)\n", int_to_precedence(prec), prec);
 

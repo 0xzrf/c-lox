@@ -47,7 +47,7 @@ static void compile_number(void);
 static void compile_grouping(void);
 static void compile_binary(void);
 static void compile_unary(void);
-static ParseRule *get_rule(TokenType);
+static const ParseRule *get_rule(TokenType);
 static uint8_t make_constant(Value);
 static void expression(void);
 static void parse_precedence(Precedence);
