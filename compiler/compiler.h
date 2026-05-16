@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include "../scanner/scanner.h"
 #include "../opcodes/chunk.h"
+#ifdef DEBUG_PRINT_CODE
 #include "../debug/debug.h"
+#endif
 
 typedef struct {
     Token prev;
