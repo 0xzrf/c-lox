@@ -101,8 +101,21 @@ static ParseRule* get_rule(TokenType type) {
 }
 
 static void parse_precedence(Precedence precedence) {
+    advance_parser();
 
+    ParseFn prefix_rule = get_rule(parser.prev.type)->prefix;
+    if (prefix_rule == NULL) {
+      error("Expect expression.");
+      return;
+    }
 
+    prefix_rule();
+
+    while (precedence <= get_rule(parser.current.type)->precedence) {
+      advance_parser();
+      ParseFn infix_rule = get_rule(parser.prev.type)->infix;
+      infix_rule();
+    }
 }
 
 static void expression() {
