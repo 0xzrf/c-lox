@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -67,6 +68,10 @@ static InterpreterResult run() {
       BINARY_OP(/);
       break;
     case OP_NEGATE:
+      if (!IS_NUM(peek_stack(0))) {
+        runtime_error("Operand must be a number.");
+        return RUNTIME_ERROR;
+      }
       _negate_last_stack_var(&vm);
       break;
     case OP_RETURN:
@@ -108,9 +113,24 @@ void push(Value value) {
   *vm.stack_top++ = value;
 }
 
+static Value peek_stack(int distance) { return *(vm.stack_top - 1 - distance); }
+
 Value pop() {
   return *--vm.stack_top; // decrement vm.stack_top first, and then dereference
                           // it
+}
+
+static void runtime_error(const char *format, ...) {
+  va_list args;
+  va_start(args, format);
+  vfprintf(stderr, format, args);
+  va_end(args);
+  fputs("\n", stderr);
+
+  size_t instruction = vm.program_counter - vm.chunk->code - 1;
+  int line = vm.chunk->lines[instruction];
+  fprintf(stderr, "[line %d] in script\n", line);
+  // resetStack();
 }
 
 void free_vm() {}

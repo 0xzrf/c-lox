@@ -66,8 +66,8 @@ bool compile(const char *source, Chunk *chunk) {
 }
 
 static void compile_number() {
-  Value value = strtod(parser.prev.start, NULL);
-  emit_constant(value);
+  double value = strtod(parser.prev.start, NULL);
+  emit_constant(NUMBER_VAL(value));
 }
 
 static void compile_grouping() {
