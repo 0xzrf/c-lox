@@ -96,6 +96,10 @@ static void compile_binary() {
   }
 }
 
+static ParseRule* get_rule(TokenType type) {
+    return &rules[type];
+}
+
 static void parse_precedence(Precedence precedence) {
 
 
