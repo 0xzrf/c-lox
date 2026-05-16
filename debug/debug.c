@@ -1,10 +1,15 @@
 #include "debug.h"
 #include "../constants/value.h"
+#include "../logs/logs.h"
 #include <stdint.h>
 #include <stdio.h>
 
 void disassemble_chunk(Chunk *chunk, const char *name) {
+#if defined(DEBUG_PRINT_CODE) || defined(DEBUG_TRACE_EXECUTION)
+  log_disassemble_chunk_header(name);
+#else
   printf("=== %s ===\n", name);
+#endif
 
   for (int offset = 0; offset < chunk->count;) {
     offset = disassemble_instruction(chunk, offset);
@@ -12,43 +17,55 @@ void disassemble_chunk(Chunk *chunk, const char *name) {
 }
 
 int disassemble_instruction(Chunk *chunk, int offset) {
-
-  printf("%04d ", offset);
-
-  printf("%4d ", get_line(chunk, offset + 1));
-
+  int line = get_line(chunk, offset + 1);
   uint8_t instruction = chunk->code[offset];
 
   switch (instruction) {
   case OP_RETURN:
-    return simple_instruction("OP_RETURN", offset);
+    return simple_instruction("OP_RETURN", offset, line);
   case OP_NEGATE:
-    return simple_instruction("OP_NEGATE", offset);
+    return simple_instruction("OP_NEGATE", offset, line);
   case OP_ADD:
-    return simple_instruction("OP_ADD", offset);
+    return simple_instruction("OP_ADD", offset, line);
   case OP_SUB:
-    return simple_instruction("OP_SUB", offset);
+    return simple_instruction("OP_SUB", offset, line);
   case OP_MUL:
-    return simple_instruction("OP_MUL", offset);
+    return simple_instruction("OP_MUL", offset, line);
   case OP_DIV:
-    return simple_instruction("OP_DIV", offset);
+    return simple_instruction("OP_DIV", offset, line);
   case OP_CONSTANT:
-    return constant_instruction("OP_CONSTANT", chunk, offset);
+    return constant_instruction("OP_CONSTANT", chunk, offset, line);
   default:
-    printf("Unknown Opecode %d\n", instruction);
+#if defined(DEBUG_PRINT_CODE) || defined(DEBUG_TRACE_EXECUTION)
+    log_opcode_unknown(offset, line, instruction);
+#else
+    printf("Unknown opcode %d\n", instruction);
+#endif
     return offset + 1;
   }
 }
 
-static int simple_instruction(const char *name, int offset) {
-  printf("%s\n", name);
+static int simple_instruction(const char *name, int offset, int line) {
+#if defined(DEBUG_PRINT_CODE) || defined(DEBUG_TRACE_EXECUTION)
+  log_opcode_simple(offset, line, name);
+#else
+  printf("%04d %4d %s\n", offset, line, name);
+#endif
   return offset + 1;
 }
 
-static int constant_instruction(const char *name, Chunk *chunk, int offset) {
+static int constant_instruction(const char *name, Chunk *chunk, int offset,
+                                int line) {
   uint8_t constant = chunk->code[offset + 1];
-  printf("%-16s %4d ", name, constant);
-  print_value(chunk->constants.value[constant], true);
+  Value value = chunk->constants.value[constant];
+
+#if defined(DEBUG_PRINT_CODE) || defined(DEBUG_TRACE_EXECUTION)
+  log_opcode_constant(offset, line, name, constant, value);
+#else
+  printf("%04d %4d %-16s %4d ", offset, line, name, constant);
+  print_value(value, true);
+  putchar('\n');
+#endif
   return offset + 2;
 }
 

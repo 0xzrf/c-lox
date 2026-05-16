@@ -7,8 +7,8 @@
 
 void disassemble_chunk(Chunk *chunk, const char *name);
 int disassemble_instruction(Chunk *chunk, int offset);
-static int simple_instruction(const char *, int);
-static int constant_instruction(const char *, Chunk *, int);
+static int simple_instruction(const char *, int, int);
+static int constant_instruction(const char *, Chunk *, int, int);
 char *int_to_token(TokenType);
 char *int_to_precedence(Precedence);
 
