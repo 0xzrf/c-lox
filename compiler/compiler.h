@@ -13,6 +13,20 @@ typedef struct {
     bool panic_mode;
 } Parser;
 
+typedef enum {
+    PREC_NONE,
+    PREC_ASSIGNMENT,  // =
+    PREC_OR,          // or
+    PREC_AND,         // and
+    PREC_EQUALITY,    // == !=
+    PREC_COMPARISON,  // < > <= >=
+    PREC_TERM,        // + -
+    PREC_FACTOR,      // * /
+    PREC_UNARY,       // ! -
+    PREC_CALL,        // . ()
+    PREC_PRIMARY
+} Precedence;
+
 bool compile(const char*, Chunk*);
 
 // error fns
@@ -34,8 +48,11 @@ static void emit_opcode_with_operands(uint8_t, uint8_t);
 
 /// bytecode helpers
 static void compile_number(void);
+static void compile_grouping(void);
+static void compile_unary(void);
 static void emit_constant(Value);
 static uint8_t make_constant(Value);
 static void expression(void);
+static void parse_precedence(Precedence);
 
 #endif

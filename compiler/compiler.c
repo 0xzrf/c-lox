@@ -1,7 +1,6 @@
 #include "compiler.h"
 #include <stdlib.h>
 
-
 Parser parser;
 Chunk* compiling_chunk;
 
@@ -20,6 +19,34 @@ bool compile(const char* source, Chunk* chunk) {
 static void compile_number() {
     Value value = strtod(parser.prev.start, NULL);
     emit_constant(value);
+}
+
+static void compile_grouping() {
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expected ) after expression");
+}
+
+static void compile_unary() {
+    TokenType operator_type = parser.prev.type;
+
+    parse_precedence(PREC_UNARY);
+
+    // Compile the operand.
+    expression();
+
+    switch(operator_type) {
+        case TOKEN_MINUS: emit_byte(OP_NEGATE); break;
+        default: return;
+    }
+}
+
+static void parse_precedence(Precedence precedence) {
+
+
+}
+
+static void expression() {
+    parse_precedence(PREC_ASSIGNMENT);
 }
 
 static uint8_t make_constant(Value value) {

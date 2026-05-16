@@ -8,34 +8,6 @@
 
 VM vm;
 
-void init_vm() {
-    init_stack();
-}
-
-// intialize stack_top to be = stack, that means the stack is empty
-void init_stack() {
-    vm.stack_size = INIT_MAX_STACK_SIZE;
-    vm.stack_top = vm.stack = realloc(vm.stack, vm.stack_size);
-}
-
-void push(Value value) {
-    // Some big programs might end up taking the entire stack
-    // so it's important to make it dynamic and increase it's size
-    if (vm.stack - vm.stack_top + 1 > vm.stack_size) {
-        int old_stack_size = vm.stack_size;
-        vm.stack_size = NEW_STACK_SIZE(old_stack_size);
-        vm.stack = INCR_STACK_SIZE(Value, vm.stack, old_stack_size, vm.stack_size);
-    }
-
-    *vm.stack_top++ = value;
-}
-
-Value pop() {
-    return *--vm.stack_top; // decrement vm.stack_top first, and then dereference it
-}
-
-void free_vm() {}
-
 InterpreterResult interpret(const char* source) {
     Chunk chunk;
 
@@ -46,9 +18,10 @@ InterpreterResult interpret(const char* source) {
         return COMPILE_TIME_ERROR;
     }
 
+    InterpreterResult result = run();
 
     free_chunk(&chunk);
-    return SUCCESSFUL_RUN;
+    return result;
 }
 
 static InterpreterResult run() {
@@ -95,3 +68,31 @@ static InterpreterResult run() {
     #undef READ_BYTE
     #undef BINARY_OP
 }
+
+void init_vm() {
+    init_stack();
+}
+
+// intialize stack_top to be = stack, that means the stack is empty
+void init_stack() {
+    vm.stack_size = INIT_MAX_STACK_SIZE;
+    vm.stack_top = vm.stack = realloc(vm.stack, vm.stack_size);
+}
+
+void push(Value value) {
+    // Some big programs might end up taking the entire stack
+    // so it's important to make it dynamic and increase it's size
+    if (vm.stack - vm.stack_top + 1 > vm.stack_size) {
+        int old_stack_size = vm.stack_size;
+        vm.stack_size = NEW_STACK_SIZE(old_stack_size);
+        vm.stack = INCR_STACK_SIZE(Value, vm.stack, old_stack_size, vm.stack_size);
+    }
+
+    *vm.stack_top++ = value;
+}
+
+Value pop() {
+    return *--vm.stack_top; // decrement vm.stack_top first, and then dereference it
+}
+
+void free_vm() {}
