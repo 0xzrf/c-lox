@@ -35,12 +35,12 @@ typedef struct {
 #define BOOL_VAL(value) ((Value){VAL_BOOL, {.boolean = value}})
 #define NIL_VAL ((Value){VAL_NIL, {.number = 0}})
 #define NUMBER_VAL(value) ((Value){VAL_NUM, {.number = value}})
-#define OBJ_VAL(value) ((Value){VAL_OBJ, {.obj = value}})
+#define OBJ_VAL(value) ((Value){VAL_OBJ, {.obj = (Obj *)(value)}})
 
 void init_value_array(ValueArray *);
 void write_value_array(ValueArray *, Value);
 void free_value_array(ValueArray *);
 void print_value(Value, bool);
-static bool values_equal(Value a, Value b);
+bool values_equal(Value a, Value b);
 
 #endif

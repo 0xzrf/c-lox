@@ -30,7 +30,8 @@ static inline bool isObjType(Value value, ObjType type) {
   return IS_OBJ(value) && AS_OBJ(value)->type == type;
 }
 ObjString *copy_string(const char *, int);
-static ObjString *allocate_string(char *, int);
+ObjString *take_string(char *, int);
+ObjString *allocate_string(char *, int);
 static Obj *allocate_object(size_t size, ObjType type);
 
 #endif

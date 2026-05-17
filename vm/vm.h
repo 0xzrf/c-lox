@@ -4,6 +4,7 @@
 #include "../common/common.h"
 #include "../common/memory.h"
 #include "../compiler/compiler.h"
+#include "../constants/obj.h"
 #include "../constants/value.h"
 #include "../debug/debug.h"
 #include "../opcodes/chunk.h"

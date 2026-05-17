@@ -4,7 +4,7 @@ OPTIONS = -O2
 MODULES = common/memory.c opcodes/chunk.c debug/debug.c logs/logs.c constants/value.c constants/obj.c vm/vm.c vm/vm_helpers.c compiler/compiler.c scanner/scanner.c
 
 build: cli/main.c
-	$(CC) -o $(OUT_LOCATION) cli/main.c $(MODULES)
+	$(CC) -o $(OUT_LOCATION) $(OPTIONS) $(MODULES) cli/main.c
 
 build_and_run: cli/main.c
 	$(CC) $(OPTIONS) -o $(OUT_LOCATION) cli/main.c $(MODULES) && $(OUT_LOCATION)

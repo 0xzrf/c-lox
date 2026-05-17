@@ -9,13 +9,17 @@
   (type *)allocate_object(sizeof(type), objectType)
 
 ObjString *copy_string(const char *str, int len) {
-  char *heap_chars = ALLOCATE(char, len - 1);
+  char *heap_chars = ALLOCATE(char, len + 1);
   memcpy(heap_chars, str, len);
   heap_chars[len] = '\0';
   return allocate_string(heap_chars, len);
 }
 
-static ObjString *allocate_string(char *chars, int length) {
+ObjString *take_string(char *chars, int length) {
+  return allocate_string(chars, length);
+}
+
+ObjString *allocate_string(char *chars, int length) {
   ObjString *string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
   string->length = length;
   string->chars = chars;
