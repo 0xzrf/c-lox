@@ -31,11 +31,15 @@ InterpreterResult interpret(const char *source) {
 static InterpreterResult run() {
 #define READ_BYTE() (*vm.program_counter++)
 #define READ_CONSTANT() (vm.chunk->constants.value[READ_BYTE()])
-#define BINARY_OP(op)                                                          \
+#define BINARY_OP(value_type, op)                                              \
   do {                                                                         \
-    Value b = pop();                                                           \
-    Value a = pop();                                                           \
-    push(a op b);                                                              \
+    if (!IS_NUM(peek_stack(0)) || !IS_NUM(peek_stack(1))) {                    \
+      runtime_error("operands must be of type number.");                       \
+      return RUNTIME_ERROR;                                                    \
+    }                                                                          \
+    double b = AS_NUMBER(pop());                                               \
+    double a = AS_NUMBER(pop());                                               \
+    push(value_type(a op b));                                                  \
   } while (false)
 
   INFINITE_LOOP {
@@ -56,16 +60,16 @@ static InterpreterResult run() {
       push(constant);
       break;
     case OP_ADD:
-      BINARY_OP(+);
+      BINARY_OP(NUMBER_VAL, +);
       break;
     case OP_SUB:
-      BINARY_OP(-);
+      BINARY_OP(NUMBER_VAL, -);
       break;
     case OP_MUL:
-      BINARY_OP(*);
+      BINARY_OP(NUMBER_VAL, *);
       break;
     case OP_DIV:
-      BINARY_OP(/);
+      BINARY_OP(NUMBER_VAL, /);
       break;
     case OP_NEGATE:
       if (!IS_NUM(peek_stack(0))) {
