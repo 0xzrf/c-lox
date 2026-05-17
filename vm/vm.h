@@ -1,8 +1,11 @@
 #ifndef clox_vm_h
 #define clox_vm_h
 
+#include "../common/common.h"
 #include "../common/memory.h"
 #include "../compiler/compiler.h"
+#include "../constants/value.h"
+#include "../debug/debug.h"
 #include "../opcodes/chunk.h"
 
 #define INIT_MAX_STACK_SIZE 256

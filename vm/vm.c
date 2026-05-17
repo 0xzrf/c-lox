@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../common/common.h"
-#include "../debug/debug.h"
 #include "vm.h"
 #include "vm_helpers.h"
 
