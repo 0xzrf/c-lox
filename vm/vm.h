@@ -34,6 +34,7 @@ void push(Value);
 Value pop();
 static Value peek_stack(int);
 static void runtime_error(const char *format, ...);
+static bool is_falsy(Value);
 
 InterpreterResult interpret(const char *);
 

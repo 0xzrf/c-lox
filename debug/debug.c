@@ -1,5 +1,4 @@
 #include "debug.h"
-#include "../constants/value.h"
 #include "../logs/logs.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -33,6 +32,8 @@ int disassemble_instruction(Chunk *chunk, int offset) {
     return simple_instruction("OP_MUL", offset, line);
   case OP_DIV:
     return simple_instruction("OP_DIV", offset, line);
+  case OP_NOT:
+    return simple_instruction("OP_NOT", offset, line);
   case OP_CONSTANT:
     return constant_instruction("OP_CONSTANT", chunk, offset, line);
   default:

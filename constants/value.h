@@ -1,7 +1,7 @@
 #ifndef clox_value_h
 #define clox_value_h
 
-#include "../common/common.h"
+#include <stdbool.h>
 
 typedef enum { VAL_BOOL, VAL_NIL, VAL_NUM } ValueType;
 

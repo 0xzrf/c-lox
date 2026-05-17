@@ -82,7 +82,7 @@ void log_opcode_simple(int offset, int line, const char *name) {
 }
 
 void log_opcode_constant(int offset, int line, const char *name,
-                         uint8_t constant_index, double constant_value) {
+                         uint8_t constant_index, Value constant_value) {
   printf("  %04d | %4d | %-16s %3d ", offset, line, name, constant_index);
   print_value(constant_value, true);
   putchar('\n');
@@ -98,14 +98,14 @@ void log_opcode_unknown(int offset, int line, uint8_t opcode) {
 
 void log_vm_step_divider(void) { print_section_rule("vm step"); }
 
-void log_vm_stack(double *stack_bottom, double *stack_top) {
+void log_vm_stack(Value *stack_bottom, Value *stack_top) {
   print_label("stack");
   if (stack_bottom >= stack_top) {
     printf("(empty)\n");
     return;
   }
 
-  for (double *slot = stack_bottom; slot < stack_top; slot++) {
+  for (Value *slot = stack_bottom; slot < stack_top; slot++) {
     putchar('[');
     print_value(*slot, false);
     putchar(']');

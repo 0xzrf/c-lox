@@ -59,6 +59,7 @@ static InterpreterResult run() {
       constant = READ_CONSTANT();
       push(constant);
       break;
+
     case OP_ADD:
       BINARY_OP(NUMBER_VAL, +);
       break;
@@ -70,6 +71,19 @@ static InterpreterResult run() {
       break;
     case OP_DIV:
       BINARY_OP(NUMBER_VAL, /);
+      break;
+    case OP_NIL:
+      push(NIL_VAL);
+      break;
+    case OP_FALSE:
+      push(BOOL_VAL(false));
+      break;
+    case OP_TRUE:
+      push(BOOL_VAL(true));
+      break;
+
+    case OP_NOT:
+      push(BOOL_VAL(is_falsy(pop())));
       break;
     case OP_NEGATE:
       if (!IS_NUM(peek_stack(0))) {
@@ -122,6 +136,10 @@ static Value peek_stack(int distance) { return *(vm.stack_top - 1 - distance); }
 Value pop() {
   return *--vm.stack_top; // decrement vm.stack_top first, and then dereference
                           // it
+}
+
+static bool is_falsy(Value value) {
+  return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
 static void runtime_error(const char *format, ...) {
