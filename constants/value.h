@@ -5,8 +5,8 @@
 
 typedef enum { VAL_BOOL, VAL_NIL, VAL_NUM, VAL_OBJ } ValueType;
 
-typedef struct {
-} Obj;
+typedef struct Obj Obj;
+typedef struct ObjString ObjString;
 
 typedef struct {
   ValueType type;
