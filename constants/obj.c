@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../vm/vm.h"
-#include "memory.h"
+#include "../common/memory.h"
 #include "obj.h"
 #include "value.h"
 
@@ -10,10 +9,10 @@
   (type *)allocate_object(sizeof(type), objectType)
 
 ObjString *copy_string(const char *str, int len) {
-  char *heapChars = ALLOCATE(char, len + 1);
-  memcpy(heapChars, str, len);
-  heapChars[len] = '\0';
-  return allocate_string(heapChars, len);
+  char *heap_chars = ALLOCATE(char, len - 1);
+  memcpy(heap_chars, str, len);
+  heap_chars[len] = '\0';
+  return allocate_string(heap_chars, len);
 }
 
 static ObjString *allocate_string(char *chars, int length) {
@@ -27,4 +26,12 @@ static Obj *allocate_object(size_t size, ObjType type) {
   Obj *object = (Obj *)reallocate(NULL, 0, size);
   object->type = type;
   return object;
+}
+
+void print_object(Value value) {
+  switch (OBJ_TYPE(value)) {
+  case OBJ_STRING:
+    printf("%s", AS_CSTRING(value));
+    break;
+  }
 }

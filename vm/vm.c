@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../common/common.h"
 #include "../debug/debug.h"
@@ -152,20 +153,6 @@ Value pop() {
 
 static bool is_falsy(Value value) {
   return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
-}
-
-static bool values_equal(Value a, Value b) {
-  if (a.type != b.type)
-    return false;
-
-  switch (a.type) {
-  case VAL_BOOL:
-    return AS_BOOL(a) == AS_BOOL(b);
-  case VAL_NIL:
-    return true; // both are def. equals
-  case VAL_NUM:
-    return AS_NUMBER(a) == AS_NUMBER(b);
-  }
 }
 
 static void runtime_error(const char *format, ...) {

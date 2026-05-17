@@ -1,6 +1,7 @@
 #ifndef clox_compiler_h
 #define clox_compiler_h
 
+#include "../constants/obj.h"
 #include "../opcodes/chunk.h"
 #include "../scanner/scanner.h"
 #include "precedence.h"

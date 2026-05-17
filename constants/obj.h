@@ -11,7 +11,8 @@
 // meaning if the arg was something like pop(), it would call pop twice!
 #define IS_STRING(value) isObjType(value, OBJ_STRING)
 #define AS_STRING(value) ((ObjString *)AS_OBJ(value))
-#define AS_CSTRING(value) ((ObjString *)AS_OBJ(value)->chars)
+#define AS_CSTRING(value) (((ObjString *)AS_OBJ(value))->chars)
+void print_object(Value value);
 
 typedef enum { OBJ_STRING } ObjType;
 

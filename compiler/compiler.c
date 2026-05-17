@@ -112,7 +112,14 @@ static void compile_literal() {
   }
 }
 
-static void compile_string() {}
+static void compile_string() {
+  // the cast of type ObjString* to Obj* here is intentional, the first
+  // value of ObjString is Obj, meanin that the memory will only be read
+  // till Obj(4bytes) of ObjString
+  // giving the intentional result of reading just Obj
+  emit_constant(
+      OBJ_VAL(copy_string(parser.prev.start + 1, parser.prev.length - 2)));
+}
 
 static void compile_binary() {
   TokenType operatorType = parser.prev.type;
