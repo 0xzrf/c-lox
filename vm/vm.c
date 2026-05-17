@@ -87,6 +87,13 @@ static InterpreterResult run() {
       Value a = pop();
       push(BOOL_VAL(values_equal(a, b)));
       break;
+    case OP_GREATER:
+      BINARY_OP(BOOL_VAL, >);
+      break;
+    case OP_LESS:
+      BINARY_OP(BOOL_VAL, <);
+      break;
+
     case OP_NOT:
       push(BOOL_VAL(is_falsy(pop())));
       break;
