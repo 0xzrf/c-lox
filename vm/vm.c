@@ -60,7 +60,16 @@ static InterpreterResult run() {
       break;
 
     case OP_ADD:
-      BINARY_OP(NUMBER_VAL, +);
+      if (IS_STRING(peek_stack(0)) && IS_STRING(peek_stack(1))) {
+        concatenate();
+      } else if (IS_NUM(peek_stack(0)) && IS_NUM(peek_stack(1))) {
+        double b = AS_NUMBER(pop());
+        double a = AS_NUMBER(pop());
+        push(NUMBER_VAL(a + b));
+      } else {
+        runtime_error("Operands must be two numbers or two strings.");
+        return RUNTIME_ERROR;
+      }
       break;
     case OP_SUB:
       BINARY_OP(NUMBER_VAL, -);
