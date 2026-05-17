@@ -82,6 +82,11 @@ static InterpreterResult run() {
       push(BOOL_VAL(true));
       break;
 
+    case OP_EQUAL:
+      Value b = pop();
+      Value a = pop();
+      push(BOOL_VAL(values_equal(a, b)));
+      break;
     case OP_NOT:
       push(BOOL_VAL(is_falsy(pop())));
       break;
@@ -140,6 +145,20 @@ Value pop() {
 
 static bool is_falsy(Value value) {
   return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+}
+
+static bool values_equal(Value a, Value b) {
+  if (a.type != b.type)
+    return false;
+
+  switch (a.type) {
+  case VAL_BOOL:
+    return AS_BOOL(a) == AS_BOOL(b);
+  case VAL_NIL:
+    return true; // both are def. equals
+  case VAL_NUM:
+    return AS_NUMBER(a) == AS_NUMBER(b);
+  }
 }
 
 static void runtime_error(const char *format, ...) {
