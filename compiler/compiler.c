@@ -28,7 +28,7 @@ const ParseRule rules[] = {
     [TOKEN_LESS] = {NULL, compile_binary, PREC_NONE},
     [TOKEN_LESS_EQUAL] = {NULL, compile_binary, PREC_NONE},
     [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
-    [TOKEN_STRING] = {NULL, NULL, PREC_NONE},
+    [TOKEN_STRING] = {compile_string, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {compile_number, NULL, PREC_NONE},
     [TOKEN_AND] = {NULL, NULL, PREC_NONE},
     [TOKEN_CLASS] = {NULL, NULL, PREC_NONE},
@@ -111,6 +111,8 @@ static void compile_literal() {
     return; // unreachable
   }
 }
+
+static void compile_string() {}
 
 static void compile_binary() {
   TokenType operatorType = parser.prev.type;
