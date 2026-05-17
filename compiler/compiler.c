@@ -20,13 +20,13 @@ const ParseRule rules[] = {
     [TOKEN_SLASH] = {NULL, compile_binary, PREC_FACTOR},
     [TOKEN_STAR] = {NULL, compile_binary, PREC_FACTOR},
     [TOKEN_BANG] = {compile_unary, NULL, PREC_NONE},
-    [TOKEN_BANG_EQUAL] = {NULL, NULL, PREC_NONE},
+    [TOKEN_BANG_EQUAL] = {NULL, compile_binary, PREC_NONE},
     [TOKEN_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_EQUAL_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_GREATER] = {NULL, NULL, PREC_NONE},
-    [TOKEN_GREATER_EQUAL] = {NULL, NULL, PREC_NONE},
-    [TOKEN_LESS] = {NULL, NULL, PREC_NONE},
-    [TOKEN_LESS_EQUAL] = {NULL, NULL, PREC_NONE},
+    [TOKEN_EQUAL_EQUAL] = {NULL, compile_binary, PREC_NONE},
+    [TOKEN_GREATER] = {NULL, compile_binary, PREC_NONE},
+    [TOKEN_GREATER_EQUAL] = {NULL, compile_binary, PREC_NONE},
+    [TOKEN_LESS] = {NULL, compile_binary, PREC_NONE},
+    [TOKEN_LESS_EQUAL] = {NULL, compile_binary, PREC_NONE},
     [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
     [TOKEN_STRING] = {NULL, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {compile_number, NULL, PREC_NONE},
@@ -129,6 +129,24 @@ static void compile_binary() {
     break;
   case TOKEN_SLASH:
     emit_byte(OP_DIV);
+    break;
+  case TOKEN_BANG_EQUAL:
+    emit_opcode_with_operands(OP_EQUAL, OP_NOT);
+    break;
+  case TOKEN_EQUAL_EQUAL:
+    emit_byte(OP_EQUAL);
+    break;
+  case TOKEN_GREATER:
+    emit_byte(OP_GREATER);
+    break;
+  case TOKEN_GREATER_EQUAL:
+    emit_opcode_with_operands(OP_LESS, OP_NOT);
+    break;
+  case TOKEN_LESS:
+    emit_byte(OP_LESS);
+    break;
+  case TOKEN_LESS_EQUAL:
+    emit_opcode_with_operands(OP_GREATER, OP_NOT);
     break;
   default:
     return; // Unreachable.
